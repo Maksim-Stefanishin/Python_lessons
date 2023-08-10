@@ -12,4 +12,17 @@
 # Постарайтесь найти самое оптимальное решение.
 # Результат представьте в виде списка (не забудьте отсортировать по возрастанию).
 
-# d(n) = (a+1)*(b+1)*(c+1) уравнение для определения количества делителей, или множителей данного числа. где a,b,c степени для всех простых множителей
+
+number = int(input("Input number: "))
+def all_divisors(number):
+    result = set() 
+    for i in range(1, int(number**0.5)+1):  
+        if number % i == 0:
+            result.add(i)
+            result.add(number//i)
+             
+    return list(result)
+
+      
+
+print(sorted(all_divisors(number)))
