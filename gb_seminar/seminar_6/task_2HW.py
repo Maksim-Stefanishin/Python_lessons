@@ -19,6 +19,6 @@ def find_indices(min, max, arr):
 arr_size = int(input('Введите размер массива: '))
 min = int(input('Введите минимальное значение диапазона: '))
 max = int(input('Введите максимальное значение диапазона: '))
-arr = [randint(1, 100) for _ in range(arr_size)]
+arr = [randint(-100, 100) for _ in range(arr_size)]
 print(arr)
 print(find_indices(min, max, arr))
