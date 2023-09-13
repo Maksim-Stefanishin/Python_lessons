@@ -18,12 +18,17 @@
 def Find_rythm (vowels, poem):
     poem = poem.lower()
     array = list(poem.split())
-    count = 0
+    result = []
+    
+    
     for _ in array:
+        count = 0
         for i in _:
             if i in vowels:
                 count+=1
-    if count%len(array) == 0:
+        result.append(count)
+      
+    if result.count(result[0]) == len(result):
         print("Парам пам-пам")  # есть ритм
     else:
         print("Пам парам") # нет ритма
