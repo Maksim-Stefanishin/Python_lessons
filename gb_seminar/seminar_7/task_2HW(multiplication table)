@@ -17,16 +17,16 @@
 # 6 12 18 24 30 36
 
 
-def multiplication_table(mult, num_rows, num_columns):
+def print_operation_table(operation, num_rows, num_columns):
     for i in range(1, num_rows+1):
         for j in range(1, num_columns+1):
-            print("%3d" % mult(i, j), end="")
+            print("%3d" % operation(i, j), end="")
         print()
 
 num_rows = int(input("Введите число строк: "))
 num_columns = int(input("Введите число столбцов: "))
 
-mult = lambda x, y: x*y
+operation = lambda x, y: x*y
 
-multiplication_table(mult, num_rows, num_columns)
+print_operation_table(operation, num_rows, num_columns)
 
