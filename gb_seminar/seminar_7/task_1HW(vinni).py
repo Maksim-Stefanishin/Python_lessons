@@ -11,29 +11,24 @@
 #     **Вывод:** Парам пам-пам  
 
 
-
-
-
-
-def Find_rythm (vowels, poem):
+def Find_rythm(vowels, poem):
     poem = poem.lower()
     array = list(poem.split())
     result = []
-    
-    
+
     for _ in array:
         count = 0
         for i in _:
             if i in vowels:
-                count+=1
+                count += 1
         result.append(count)
-      
+
     if result.count(result[0]) == len(result):
         print("Парам пам-пам")  # есть ритм
     else:
-        print("Пам парам") # нет ритма
+        print("Пам парам")  # нет ритма
 
 
-vowels = ['а', 'у', 'о', 'ы', 'и', 'э', 'я', 'ю', 'ё', 'е', 'a', 'e', 'i', 'o', 'u', 'y'] 
-poem = input("Введите строки Винни: ") 
-Find_rythm (vowels, poem)
+vowels = ['а', 'у', 'о', 'ы', 'и', 'э', 'я', 'ю', 'ё', 'е', 'a', 'e', 'i', 'o', 'u', 'y']
+poem = input("Введите строки Винни: ")
+Find_rythm(vowels, poem)
