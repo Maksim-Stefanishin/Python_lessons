@@ -1,161 +1,109 @@
 import config
 import json
 from random import *
-
 import telebot
 from telebot import types
 
-global items
-
 bot = telebot.TeleBot(config.TOKEN)
 
-films = ['Matrix', "Solaris", "Lord of the Rings", 'Dunkirk']
-data = []
 
+def process_add_film(message):
+    with open("data.json", "r") as file:
+        data = json.load(file)
+        data['movies'].append(message.text)
 
-def process_add(message):
-    with open("films.json", "r") as file:
-        films = json.load(file)
-    films.append(message.text)
-    with open("films.json", "w", ) as file:
-        json.dump(films, file, ensure_ascii=False)
-    print(films)
-
+    with open("data.json", "w") as file:
+        json.dump(data, file, ensure_ascii=False)
     bot.send_message(message.chat.id, 'Film added')
 
 
-def process_delete(message):
+def process_add_book(message):
+    with open("data.json", "r") as file:
+        data = json.load(file)
+        data['books'].append(message.text)
+
+    with open("data.json", "w") as file:
+        json.dump(data, file, ensure_ascii=False)
+    bot.send_message(message.chat.id, 'Book added')
+
+
+def process_delete_film(message):
     try:
-        with open("films.json", "r") as file:
-            films = json.load(file)
-        films.remove(message.text)
-        with open("films.json", "w", ) as file:
-            json.dump(films, file, ensure_ascii=False)
+        with open("data.json", "r") as file:
+            data = json.load(file)
+        data['movies'].remove(message.text)
+        with open("data.json", "w", ) as file:
+            json.dump(data, file, ensure_ascii=False)
 
         bot.send_message(message.chat.id, 'Film deleted')
     except:
         bot.send_message(message.chat.id, 'Oops. there is no such film. Try another')
 
 
-# @bot.message_handler(commands=['start'])
-# def welcome(message):
-#     # sti = open('static/sticker.webp', 'rb')
-#     # bot.send_sticker(message.chat.id, sti)
-#
-#     # keyboard
-#     markup = types.ReplyKeyboardMarkup(one_time_keyboard=False)
-#     item1 = types.KeyboardButton("🎲 Рандомное число")
-#     item2 = types.KeyboardButton("😊 Как дела?")
-#
-#     markup.add(item1, item2)
-#
-#     bot.reply_to(message.chat.id, "Я - <b>{1.first_name}</b>, бот созданный чтобы быть подопытным кроликом.".format(
-#         message.from_user, bot.get_me()),
-#                  parse_mode='html', reply_markup=markup)
+def process_delete_book(message):
+    try:
+        with open("data.json", "r") as file:
+            data = json.load(file)
+        data['books'].remove(message.text)
+        with open("data.json", "w", ) as file:
+            json.dump(data, file, ensure_ascii=False)
+
+        bot.send_message(message.chat.id, 'Book deleted')
+    except:
+        bot.send_message(message.chat.id, 'Oops. there is no such book. Try another')
+
+
+@bot.message_handler(commands=['start'])
+def process_start_command(message):
+    sti = open('files/sticker.webp', 'rb')
+    bot.send_sticker(message.chat.id, sti)
+
+    keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    button1 = types.KeyboardButton("🎬 Random film ")
+    button2 = types.KeyboardButton("📖 Random book")
+    button3 = types.KeyboardButton("📖/🎬 All books and films")
+
+    keyboard.add(button1, button2, button3)
+    bot.send_message(message.chat.id, "I'm - <b>{1.first_name}</b>, puppet-bot.".format(
+        message.from_user, bot.get_me()),
+                     parse_mode='html', reply_markup=keyboard)
 
 
 @bot.message_handler(content_types=['text'])
-def film_list(message):
-
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False)
-    item1 = types.KeyboardButton("🎲 Рандомное число")
-    item2 = types.KeyboardButton("😊 Как дела?")
-
-    markup.add(item1, item2)
+def chatting(message):
     if message.chat.type == 'private':
 
         if message.text == 'start':
             bot.send_message(message.chat.id, 'Bot film-keeper begins to work')
 
-        elif message.text == 'all':
-            with open('films.json', 'r') as file:
-                films = json.load(file)
-            bot.send_message(message.chat.id, str(films))
-        elif message.text == 'random':
-            with open("films.json", "r") as file:
-                films = json.load(file)
-            bot.send_message(message.chat.id, str(choice(films)))
-        elif message.text == 'add':
-            bot.send_message(message.chat.id, 'Input added film')
-            bot.register_next_step_handler(message, process_add)
-        elif message.text == 'delete':
-            bot.send_message(message.chat.id, 'Input name of erased film')
-            bot.register_next_step_handler(message, process_delete)
+        elif message.text == '📖/🎬 All books and films':
+            with open('data.json', 'r') as file:
+                data = json.load(file)
+            bot.send_message(message.chat.id, str(data))
+        elif message.text == '🎬 Random film':
+            with open("data.json", "r") as file:
+                data = json.load(file)
+                movies = data['movies']
+            bot.send_message(message.chat.id, str(choice(movies)))
+        elif message.text == '📖 Random book':
+            with open("data.json", "r") as file:
+                data = json.load(file)
+                books = data['books']
+            bot.send_message(message.chat.id, str(choice(books)))
+        elif message.text == 'add film':
+            bot.send_message(message.chat.id, 'Input added film 🎬')
+            bot.register_next_step_handler(message, process_add_film)
+        elif message.text == 'add book':
+            bot.send_message(message.chat.id, 'Input added book 📖')
+            bot.register_next_step_handler(message, process_add_book)
+        elif message.text == 'delete film':
+            bot.send_message(message.chat.id, 'Input name of erased film 🎬')
+            bot.register_next_step_handler(message, process_delete_film)
+        elif message.text == 'delete book':
+            bot.send_message(message.chat.id, 'Input name of erased book 📖')
+            bot.register_next_step_handler(message, process_delete_book)
         else:
-            bot.send_message(message.chat.id, 'Я не знаю что ответить 😢')
+            bot.send_message(message.chat.id, "Don't know how to answer 😢")
 
-
-# def save():
-#     with open('films.json', 'w', encoding='utf-8') as file:
-#         json.dump(films, file, ensure_ascii=False)
-#     print('Our film-library was successfully saved in films.json')
-#     print(films)
-#
-#
-# def load():
-#     with open('films.json', 'r', encoding='utf-8') as file:
-#         print('Film list was successfully loaded')
-#         films = json.load(file)
-#         print(films)
-#         return films
-#
-#
-# while True:
-#
-#     command = input('Input command: ')
-#
-#     if command == 'start':
-#         print('Bot film-keeper begins to work')
-#
-#     elif command == 'stop':
-#         save()
-#         print('Bot end his work. Try again soon.')
-#         break
-#
-#     elif command == 'all':
-#         with open("films.json", "r") as file:
-#             print('This is actual films list')
-#             films = json.load(file)
-#             print(films)
-#
-#     elif command == 'add':
-#         with open("films.json", "r") as file:
-#             films = json.load(file)
-#             f = input('Input name of film: ')
-#             films.append(f)
-#         with open("films.json", "w") as file:
-#             json.dump(films, file)
-#
-#         print('Film was successfully added')
-#
-#     elif command == 'help':
-#         print('Here should be a link to manual')
-#
-#     elif command == 'delete':
-#         try:
-#
-#             with open("films.json", "r") as file:
-#                 films = json.load(file)
-#                 f = input('Input name of film to remove: ')
-#                 films.remove(f)
-#             with open("films.json", "w") as file:
-#                 json.dump(films, file)
-#             print('Film was successfully removed')
-#         except:
-#             print('Oops. there is no such film. Try another')
-#
-#     elif command == 'random':
-#         with open("films.json", "r") as file:
-#             films = json.load(file)
-#
-#             print('Random film from list is ' + choice(films))
-#     elif command == 'save':
-#         save()
-#
-#     elif command == 'load':
-#         load()
-#
-#     else:
-#         print('Incorrect command. Please, read manual. use /help')
 
 bot.infinity_polling(skip_pending=True)
