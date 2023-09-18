@@ -1,1 +1,10 @@
-{"movies": ["Matrix", "Solaris", "Lord of the Rings", "Dunkirk", "Pregnant in 16th", "Star Wars", "HP", "Breaking bed", "Thor", "WW2", "asas"], "books": ["Song of Ice and Fire", "Dune", "Harry Potter", "Portrait of Dorian Gray"]}
+{"movies": ["Matrix", "Solaris", "Lord of the Rings", "Dunkirk", "Pregnant in 16th", "Star Wars", "HP", "Breaking bed", "Thor", "WW2", "ll", "II", "HP3", "HP4"], "books": ["Song of Ice and Fire", "Dune", "Harry Potter", "Portrait of Dorian Gray"],
+"commands":["'📖/🎬 All books and films' - ввыводит  существующий  список фильмов и книг.",
+"'🎬 Random film' - ввыводит случайный фильм из существующего списка.",
+"'📖 Random book' - ввыводит случайную книгу из существующего списка.",
+"'add film' - инициирует функцию добавления фильма.",
+"'add book' - инициирует функцию добавления книги.",
+"'delete film' - инициирует функцию удаление фильма из списка.",
+"'delete book' - инициирует функцию удаление книги из списка.",
+"'show books' - показывает все книги из списка.",
+"'show movies' - показывает все фильмы из списка."]}
