@@ -165,3 +165,6 @@ def chatting(message):
             bot.send_message(message.chat.id, 'Bot film-keeper begins to work')
         else:
             bot.send_message(message.chat.id, "I don't understand you")
+
+
+bot.infinity_polling(skip_pending=True)
